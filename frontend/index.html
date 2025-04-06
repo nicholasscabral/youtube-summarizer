@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Resumo de Vídeo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --background: #f8fafc;
+        --surface: #ffffff;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --border: #e2e8f0;
+        --success: #22c55e;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+          0 4px 6px -4px rgb(0 0 0 / 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--background);
+        color: var(--text-primary);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        text-align: center;
+        margin-bottom: 3rem;
+        letter-spacing: -0.025em;
+      }
+
+      .input-container {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        background: var(--surface);
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: var(--shadow);
+      }
+
+      #url {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        color: var(--text-primary);
+        transition: all 0.2s;
+        font-family: "Inter", sans-serif;
+      }
+
+      #url:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      button {
+        padding: 0.75rem 1.5rem;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: "Inter", sans-serif;
+      }
+
+      button:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-1px);
+      }
+
+      button:disabled {
+        background-color: var(--text-secondary);
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .progress-container {
+        margin: 2rem 0;
+        display: none;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 0.5rem;
+        background-color: var(--border);
+        border-radius: 9999px;
+        overflow: hidden;
+      }
+
+      .progress {
+        width: 0%;
+        height: 100%;
+        background-color: var(--primary);
+        transition: width 0.3s ease;
+      }
+
+      .progress-message {
+        margin-top: 0.5rem;
+        color: var(--text-secondary);
+        text-align: center;
+        font-size: 0.875rem;
+      }
+
+      #resumo {
+        background-color: var(--surface);
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: var(--shadow);
+        margin-bottom: 3rem;
+        font-size: 1rem;
+      }
+
+      #resumo p {
+        margin: 1rem 0;
+        line-height: 1.7;
+        color: var(--text-primary);
+      }
+
+      #resumo h2 {
+        color: var(--text-primary);
+        margin: 2rem 0 1rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        letter-spacing: -0.025em;
+      }
+
+      #resumo h2:first-child {
+        margin-top: 0;
+      }
+
+      #resumo ul {
+        list-style-type: none;
+        padding-left: 0;
+        margin: 1rem 0;
+      }
+
+      #resumo li {
+        margin-bottom: 0.75rem;
+        padding-left: 1.5rem;
+        position: relative;
+        line-height: 1.6;
+        color: var(--text-primary);
+      }
+
+      #resumo li:before {
+        content: "•";
+        color: var(--primary);
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+        font-size: 1.2em;
+      }
+
+      #resumo .section {
+        margin-bottom: 2rem;
+      }
+
+      #resumo .section-title {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+        letter-spacing: -0.025em;
+      }
+
+      #resumo .subsection {
+        margin-left: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      #resumo .subsection-title {
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+      }
+
+      #resumo .highlight {
+        background-color: var(--background);
+        padding: 1.25rem;
+        border-radius: 0.75rem;
+        margin: 1rem 0;
+        border-left: 4px solid var(--primary);
+      }
+
+      #resumo .conclusion {
+        font-style: italic;
+        color: var(--text-secondary);
+        margin: 1.5rem 0;
+        padding: 1.25rem;
+        background-color: var(--background);
+        border-radius: 0.75rem;
+      }
+
+      h2 {
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+        font-size: 1.75rem;
+        font-weight: 600;
+        letter-spacing: -0.025em;
+      }
+
+      #historico {
+        list-style: none;
+        padding: 0;
+      }
+
+      #historico li {
+        background-color: var(--surface);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-radius: 1rem;
+        box-shadow: var(--shadow);
+      }
+
+      #historico li .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 1rem;
+        background-color: var(--background);
+        border-radius: 0.75rem;
+        margin-bottom: 1rem;
+        transition: all 0.2s;
+      }
+
+      #historico li .header:hover {
+        background-color: var(--border);
+      }
+
+      #historico li .header h3 {
+        margin: 0;
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+
+      #historico li .header .date {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+
+      #historico li .content {
+        display: none;
+        padding: 1.5rem;
+        border-top: 1px solid var(--border);
+      }
+
+      #historico li .content.show {
+        display: block;
+      }
+
+      #historico li .video-info {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding: 1.25rem;
+        background-color: var(--background);
+        border-radius: 0.75rem;
+      }
+
+      #historico li .video-info img {
+        width: 160px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 0.5rem;
+        box-shadow: var(--shadow-sm);
+      }
+
+      #historico li .video-info .details {
+        flex: 1;
+      }
+
+      #historico li .video-info .details p {
+        margin: 0.5rem 0;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+
+      #historico li .video-info .details .title {
+        color: var(--text-primary);
+        font-weight: 500;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          padding: 1rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+          margin-bottom: 2rem;
+        }
+
+        .input-container {
+          flex-direction: column;
+        }
+
+        #historico li .video-info {
+          flex-direction: column;
+        }
+
+        #historico li .video-info img {
+          width: 100%;
+          height: auto;
+          aspect-ratio: 16/9;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Resumo de Vídeo</h1>
+      <div class="input-container">
+        <input
+          id="url"
+          type="text"
+          placeholder="Cole a URL do YouTube"
+          size="50"
+        />
+        <button onclick="resumir()" id="resumirBtn">Resumir</button>
+      </div>
+
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-bar">
+          <div class="progress" id="progress"></div>
+        </div>
+        <div class="progress-message" id="progressMessage"></div>
+      </div>
+
+      <div id="resumo"></div>
+      <h2>Histórico</h2>
+      <ul id="historico"></ul>
+    </div>
+
+    <script>
+      let ws = null;
+
+      function formatSummary(text) {
+        // Dividir o texto em seções baseadas em títulos e parágrafos
+        const sections = text.split(/\n(?=.*:)/);
+        let html = "";
+
+        sections.forEach((section) => {
+          const lines = section.trim().split("\n");
+          const title = lines[0].trim();
+          const content = lines.slice(1).join("\n");
+
+          if (title.includes(":")) {
+            // É uma seção com título
+            html += `<div class="section">
+              <div class="section-title">${title}</div>
+              ${formatContent(content)}
+            </div>`;
+          } else {
+            // É um conteúdo sem título específico
+            html += formatContent(section);
+          }
+        });
+
+        return html;
+      }
+
+      function formatContent(text) {
+        // Dividir o texto em parágrafos e listas
+        const paragraphs = text.split("\n\n");
+        let html = "";
+
+        paragraphs.forEach((paragraph) => {
+          const lines = paragraph.split("\n");
+
+          if (lines.some((line) => line.trim().startsWith("•"))) {
+            // É uma lista com bullet points
+            html += `<ul>${formatBulletPoints(paragraph)}</ul>`;
+          } else {
+            // É um parágrafo normal
+            const trimmedParagraph = paragraph.trim();
+            if (trimmedParagraph) {
+              if (
+                trimmedParagraph.toLowerCase().includes("conclusão") ||
+                trimmedParagraph.toLowerCase().includes("em resumo")
+              ) {
+                html += `<div class="conclusion">${trimmedParagraph}</div>`;
+              } else if (trimmedParagraph.length > 100) {
+                html += `<p>${trimmedParagraph}</p>`;
+              } else {
+                html += `<div class="highlight">${trimmedParagraph}</div>`;
+              }
+            }
+          }
+        });
+
+        return html;
+      }
+
+      function formatBulletPoints(text) {
+        const points = text
+          .split("\n")
+          .filter((line) => line.trim())
+          .map((line) => {
+            if (line.trim().startsWith("•")) {
+              return `<li>${line.trim().substring(1).trim()}</li>`;
+            }
+            return `<li>${line.trim()}</li>`;
+          });
+
+        return points.join("");
+      }
+
+      async function resumir() {
+        const url = document.getElementById("url").value;
+        if (!url) return;
+
+        const resumirBtn = document.getElementById("resumirBtn");
+        const progressContainer = document.getElementById("progressContainer");
+        const progress = document.getElementById("progress");
+        const progressMessage = document.getElementById("progressMessage");
+        const resumo = document.getElementById("resumo");
+
+        resumirBtn.disabled = true;
+        progressContainer.style.display = "block";
+        progress.style.width = "0%";
+        progressMessage.textContent = "Iniciando...";
+        resumo.innerHTML = "";
+
+        try {
+          if (ws) {
+            ws.close();
+          }
+
+          ws = new WebSocket("ws://localhost:8000/ws");
+
+          ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log("Received data:", data);
+
+            if (data.progress !== undefined) {
+              progress.style.width = `${data.progress}%`;
+              progressMessage.textContent = data.message;
+            }
+
+            if (data.summary) {
+              resumo.innerHTML = formatSummary(data.summary);
+              carregarHistorico();
+              resumirBtn.disabled = false;
+              progressContainer.style.display = "none";
+              ws.close();
+              ws = null;
+            }
+          };
+
+          ws.onopen = () => {
+            console.log("WebSocket connected");
+            ws.send(JSON.stringify({ type: "summarize", url }));
+          };
+
+          ws.onerror = (error) => {
+            console.error("WebSocket error:", error);
+            resumo.innerHTML = "Erro na conexão. Tente novamente.";
+            resumirBtn.disabled = false;
+            progressContainer.style.display = "none";
+            ws = null;
+          };
+
+          ws.onclose = () => {
+            console.log("WebSocket closed");
+            if (resumirBtn.disabled) {
+              resumo.innerHTML = "Conexão encerrada. Tente novamente.";
+              resumirBtn.disabled = false;
+              progressContainer.style.display = "none";
+            }
+            ws = null;
+          };
+        } catch (error) {
+          console.error("Error:", error);
+          resumo.innerHTML = "Erro ao processar o vídeo. Tente novamente.";
+          resumirBtn.disabled = false;
+          progressContainer.style.display = "none";
+          if (ws) {
+            ws.close();
+            ws = null;
+          }
+        }
+      }
+
+      async function carregarHistorico() {
+        const res = await fetch("http://localhost:8000/history");
+        const data = await res.json();
+        const ul = document.getElementById("historico");
+        ul.innerHTML = "";
+        data.forEach((item) => {
+          const li = document.createElement("li");
+          const content = document.createElement("div");
+          content.className = "content";
+
+          const videoInfo = item.video_info || {};
+          const thumbnail = videoInfo.thumbnail || "";
+          const duration = formatDuration(videoInfo.duration || 0);
+          const uploadDate = formatDate(videoInfo.upload_date || "");
+
+          li.innerHTML = `
+            <div class="header" onclick="toggleContent(this)">
+              <h3>${videoInfo.title || item.url}</h3>
+              <div class="date">${new Date(
+                item.created_at
+              ).toLocaleString()}</div>
+            </div>
+            <div class="content">
+              <div class="video-info">
+                ${thumbnail ? `<img src="${thumbnail}" alt="Thumbnail">` : ""}
+                <div class="details">
+                  <div class="title">${
+                    videoInfo.title || "Título não disponível"
+                  }</div>
+                  <p>Canal: ${videoInfo.uploader || "Desconhecido"}</p>
+                  <p>Duração: ${duration}</p>
+                  <p>Data de upload: ${uploadDate}</p>
+                </div>
+              </div>
+              ${formatSummary(item.summary)}
+            </div>
+          `;
+          ul.appendChild(li);
+        });
+      }
+
+      function toggleContent(header) {
+        const content = header.nextElementSibling;
+        content.classList.toggle("show");
+      }
+
+      function formatDuration(seconds) {
+        if (!seconds) return "Desconhecida";
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+
+        if (hours > 0) {
+          return `${hours}:${minutes.toString().padStart(2, "0")}:${secs
+            .toString()
+            .padStart(2, "0")}`;
+        }
+        return `${minutes}:${secs.toString().padStart(2, "0")}`;
+      }
+
+      function formatDate(dateStr) {
+        if (!dateStr) return "Desconhecida";
+        const year = dateStr.substring(0, 4);
+        const month = dateStr.substring(4, 6);
+        const day = dateStr.substring(6, 8);
+        return `${day}/${month}/${year}`;
+      }
+
+      carregarHistorico();
+    </script>
+  </body>
+</html>
