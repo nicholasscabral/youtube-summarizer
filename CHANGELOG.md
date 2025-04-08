@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/nicholasscabral/youtube-summarizer/compare/v1.0.1...v1.1.0) (2025-04-08)
+
+
+### Features
+
+* fetch video information and display on history ([2b73f8b](https://github.com/nicholasscabral/youtube-summarizer/commit/2b73f8b4f70bbe4a89382753c47eae3d438aa997))
+
 ## [1.0.1](https://github.com/nicholasscabral/youtube-summarizer/compare/v1.0.0...v1.0.1) (2025-04-06)
 
 
