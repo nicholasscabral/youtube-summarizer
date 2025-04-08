@@ -9,6 +9,7 @@ pydub==0.25.1
 ffmpeg-python==0.2.0
 python-dotenv==1.0.1
 openai==0.28.1
+isodate==0.6.1  # Necessário para interpretar duração do YouTube
 
-# Versioning
+# Versionamento automático
 semantic-release

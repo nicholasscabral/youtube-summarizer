@@ -526,7 +526,9 @@
           const content = document.createElement("div");
           content.className = "content";
 
-          const videoInfo = item.video_info || {};
+          console.log(item);
+
+          const videoInfo = item || {};
           const thumbnail = videoInfo.thumbnail || "";
           const duration = formatDuration(videoInfo.duration || 0);
           const uploadDate = formatDate(videoInfo.upload_date || "");

@@ -127,11 +127,11 @@ def history():
         return [{
             "url": r.url,
             "summary": r.summary,
-            "video_title": r.video_title,
-            "video_thumbnail": r.video_thumbnail,
-            "video_duration": r.video_duration,
-            "video_uploader": r.video_uploader,
-            "video_upload_date": r.video_upload_date,
+            "title": r.video_title,
+            "thumbnail": r.video_thumbnail,
+            "duration": r.video_duration,
+            "uploader": r.video_uploader,
+            "upload_date": r.video_upload_date,
             "created_at": r.created_at.isoformat() if r.created_at else None
         } for r in results]
     except Exception as e:
