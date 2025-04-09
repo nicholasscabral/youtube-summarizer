@@ -110,27 +110,17 @@ def generate_summary(text):
         logger.error(f"Erro ao gerar resumo: {str(e)}")
         raise
 
-async def summarize_video(url, progress_callback=None):
+async def summarize_video(url):
     try:
         video_id = extract_video_id(url)
         video_info = get_video_info_youtube_api(video_id)
 
-        if progress_callback:
-            await progress_callback(20, "Convertendo áudio...")
         mp3 = download_audio(url)
         audio = AudioSegment.from_mp3(mp3)
         audio.export("audio.wav", format="wav")
 
-        if progress_callback:
-            await progress_callback(40, "Transcrevendo áudio...")
         transcript = transcribe_audio("audio.wav")
-
-        if progress_callback:
-            await progress_callback(60, "Gerando resumo...")
         summary = generate_summary(transcript)
-
-        if progress_callback:
-            await progress_callback(100, "Processo concluído!")
 
         os.remove("audio.mp3")
         os.remove("audio.wav")

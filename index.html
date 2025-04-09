@@ -470,63 +470,43 @@
         progressMessage.textContent = "Iniciando...";
         resumo.innerHTML = "";
 
+        // Simulated progress steps
+        const steps = [
+          { progress: 20, message: "Convertendo áudio..." },
+          { progress: 40, message: "Transcrevendo áudio..." },
+          { progress: 60, message: "Gerando resumo..." },
+          { progress: 100, message: "Processo concluído!" },
+        ];
+
+        // Simulate progress
+        for (const step of steps) {
+          await new Promise((resolve) => setTimeout(resolve, 3750)); // 15 seconds total / 4 steps
+          progress.style.width = `${step.progress}%`;
+          progressMessage.textContent = step.message;
+        }
+
         try {
-          if (ws) {
-            ws.close();
+          const response = await fetch("http://localhost:8000/summarize", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Erro ao processar o vídeo");
           }
 
-          ws = new WebSocket("ws://localhost:8000/ws");
-
-          ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            console.log("Received data:", data);
-
-            if (data.progress !== undefined) {
-              progress.style.width = `${data.progress}%`;
-              progressMessage.textContent = data.message;
-            }
-
-            if (data.summary) {
-              resumo.innerHTML = formatSummary(data.summary);
-              carregarHistorico();
-              resumirBtn.disabled = false;
-              progressContainer.style.display = "none";
-              ws.close();
-              ws = null;
-            }
-          };
-
-          ws.onopen = () => {
-            console.log("WebSocket connected");
-            ws.send(JSON.stringify({ type: "summarize", url }));
-          };
-
-          ws.onerror = (error) => {
-            console.error("WebSocket error:", error);
-            resumo.innerHTML = "Erro na conexão. Tente novamente.";
-            resumirBtn.disabled = false;
-            progressContainer.style.display = "none";
-            ws = null;
-          };
-
-          ws.onclose = () => {
-            console.log("WebSocket closed");
-            if (resumirBtn.disabled) {
-              resumo.innerHTML = "Conexão encerrada. Tente novamente.";
-              resumirBtn.disabled = false;
-              progressContainer.style.display = "none";
-            }
-            ws = null;
-          };
+          const data = await response.json();
+          resumo.innerHTML = formatSummary(data.summary);
+          carregarHistorico();
         } catch (error) {
           console.error("Error:", error);
           resumo.innerHTML = "Erro ao processar o vídeo. Tente novamente.";
+        } finally {
           resumirBtn.disabled = false;
           progressContainer.style.display = "none";
-          if (ws) {
-            ws.close();
-            ws = null;
-          }
         }
       }
 
