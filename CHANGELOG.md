@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/nicholasscabral/youtube-summarizer/compare/v1.2.0...v1.2.1) (2025-04-09)
+
+
+### Bug Fixes
+
+* remove progress callback for now ([4e76bdf](https://github.com/nicholasscabral/youtube-summarizer/commit/4e76bdf9a876dff659a10a48a0c0539d7e7077e6))
+
 # [1.2.0](https://github.com/nicholasscabral/youtube-summarizer/compare/v1.1.0...v1.2.0) (2025-04-08)
 
 
